@@ -1,0 +1,87 @@
+curl -XPUT 'http://bella.mysqlboy.com:9200/cns/notification/2252913?pretty=' -d '{
+  "time": "2016-05-17 20:12:34"
+  "msg": "Service: MySQL Replication Delay
+  Host: sys-dr1
+  Address: 10.1.3.165
+  State: OK
+
+  Date/Time: Tue May 17 16:12:33 EDT 2016
+
+  Additional Info:
+
+  OK 0 seconds of replication delay
+
+  summary: sys-dr1 MySQL Replication Delay is OK"
+  "client_id": "1"
+  "ack_at": "2016-05-17 20:12:34"
+  "ack_by": "7"
+  "project_id": "48196"
+  "component_id": "4486"
+  "status_id": "1"
+  "service_id": "6"
+  "ready_for_pager": "0"
+}'
+
+curl -XDELETE 'http://127.0.0.1:9200/cns/'
+
+curl -XPUT 'http://127.0.0.1:9200/cns/' -d '{
+    "settings" : {
+        "number_of_shards" : 3,
+        "number_of_replicas" : 2
+    }
+}'
+curl -XPUT 'http://127.0.0.1:9200/cns/_mapping/notification?pretty=True' -d '{
+    "notification" : {
+        "properties" : {
+          "ack_at" : {
+            "type" : "date"
+          },
+          "ack_by" : {
+            "type" : "long"
+          },
+          "client_id" : {
+            "type" : "long"
+          },
+          "component_id" : {
+            "type" : "long"
+          },
+          "msg" : {
+            "type" : "string",
+            "index": "analyzed"
+          },
+          "project_id" : {
+            "type" : "long"
+          },
+          "ready_for_pager" : {
+            "type" : "long"
+          },
+          "service_id" : {
+            "type" : "long"
+          },
+          "status_id" : {
+            "type" : "long"
+          },
+          "time" : {
+            "type" : "date"
+          },
+          "service" : {
+            "type" : "string",
+            "index": "not_analyzed"
+          }
+    }
+  }
+}'
+
+curl -XPUT 'http://127.0.0.1:9200/cns/notification/2252914?pretty=true' -d '{
+  "time": "2016-05-17T20:12:34",
+  "msg": "Service: MySQL Replication Delay
+            Host: sys-dr1",
+  "client_id": "1",
+  "ack_at": "2016-05-17T20:12:34",
+  "ack_by": "7",
+  "project_id": "48196",
+  "component_id": "4486",
+  "status_id": "1",
+  "service_id": "6",
+  "ready_for_pager": "0"
+}'
